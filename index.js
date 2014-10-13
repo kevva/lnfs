@@ -49,7 +49,7 @@ module.exports = function (src, dest, type, cb) {
 
 	if (typeof type === 'function' && !cb) {
 		cb = type;
-		type = 'file';
+		type = null;
 	}
 
 	fs.lstat(dest, function (err, stats) {
@@ -94,7 +94,6 @@ module.exports = function (src, dest, type, cb) {
 module.exports.sync = function (src, dest, type) {
 	src = path.resolve(src);
 	dest = path.resolve(dest);
-	type = type || 'file';
 
 	try {
 		var stats = fs.lstatSync(dest);
