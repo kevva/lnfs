@@ -5,16 +5,6 @@ var mkdirp = require('mkdirp');
 var path = require('path');
 var rm = require('rimraf');
 
-/**
- * Create symlink
- *
- * @param {String} src
- * @param {String} dest
- * @param {String} type
- * @param {Function} cb
- * @api private
- */
-
 function link(src, dest, type, cb) {
 	rm(dest, function (err) {
 		if (err) {
@@ -32,16 +22,6 @@ function link(src, dest, type, cb) {
 		});
 	});
 }
-
-/**
- * Async
- *
- * @param {String} src
- * @param {String} dest
- * @param {String} type
- * @param {Function} cb
- * @api public
- */
 
 module.exports = function (src, dest, type, cb) {
 	src = path.resolve(src);
@@ -81,15 +61,6 @@ module.exports = function (src, dest, type, cb) {
 		});
 	});
 };
-
-/**
- * Sync
- *
- * @param {String} src
- * @param {String} dest
- * @param {String} type
- * @api public
- */
 
 module.exports.sync = function (src, dest, type) {
 	src = path.resolve(src);
