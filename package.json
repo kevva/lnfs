@@ -12,14 +12,19 @@
   "engines": {
     "node": ">=0.10.0"
   },
+  "bin": {
+    "lnfs": "cli.js"
+  },
   "scripts": {
     "test": "node test.js"
   },
   "files": [
+    "cli.js",
     "index.js"
   ],
   "keywords": [],
   "dependencies": {
+    "meow": "^3.1.0",
     "mkdirp": "^0.5.0",
     "rimraf": "^2.2.8"
   },

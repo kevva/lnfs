@@ -24,6 +24,22 @@ symlink('foo.txt', 'bar.txt', function (err) {
 symlink.sync('foo.txt', 'bar.txt');
 ```
 
+## CLI
+
+```
+$ npm install --global lnfs
+```
+
+```
+$ lnfs --help
+
+Usage
+  $ lnfs <file> <target>
+
+Example
+  $ lnfs foo.txt bar.txt
+```
+
 ## License
 
 MIT © [Kevin Mårtensson](https://github.com/kevva)
