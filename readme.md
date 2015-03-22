@@ -2,11 +2,13 @@
 
 > Safely force create symlinks
 
+
 ## Install
 
 ```sh
 $ npm install --save lnfs
 ```
+
 
 ## Usage
 
@@ -24,6 +26,37 @@ symlink('foo.txt', 'bar.txt', function (err) {
 symlink.sync('foo.txt', 'bar.txt');
 ```
 
+
+## API
+
+### lnfs(src, dest, type, callback)
+
+#### src
+
+Type: `string`
+
+Path to source file.
+
+#### dest
+
+Type: `string`
+
+Path to destination.
+
+#### type
+
+Type: `string`  
+Default: `file`
+
+Can be set to 'dir', 'file', or 'junction' and is only available on Windows (ignored on other platforms).
+
+#### callback(err)
+
+Type: `function`
+
+Returns nothing but a possible exception.
+
+
 ## CLI
 
 ```
@@ -39,6 +72,7 @@ Usage
 Example
   $ lnfs foo.txt bar.txt
 ```
+
 
 ## License
 

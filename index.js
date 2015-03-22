@@ -24,20 +24,24 @@ function link(src, dest, type, cb) {
 }
 
 module.exports = function (src, dest, type, cb) {
-	src = path.resolve(src);
-	dest = path.resolve(dest);
+	if (typeof src !== 'string' || typeof dest !== 'string') {
+		throw new Error('Source file and target is required');
+	}
 
 	if (typeof type === 'function' && !cb) {
 		cb = type;
 		type = null;
 	}
 
-	fs.lstat(dest, function (err, stats) {
-		if (err) {
-			if (err.code === 'ENOENT') {
-				return link(src, dest, type, cb);
-			}
+	src = path.resolve(src);
+	dest = path.resolve(dest);
 
+	fs.lstat(dest, function (err, stats) {
+		if (err && err.code === 'ENOENT') {
+			return link(src, dest, type, cb);
+		}
+
+		if (err) {
 			cb(err);
 			return;
 		}
@@ -63,6 +67,10 @@ module.exports = function (src, dest, type, cb) {
 };
 
 module.exports.sync = function (src, dest, type) {
+	if (typeof src !== 'string' || typeof dest !== 'string') {
+		throw new Error('Source file and target is required');
+	}
+
 	src = path.resolve(src);
 	dest = path.resolve(dest);
 

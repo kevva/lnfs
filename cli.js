@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-var lnfs = require('./');
+var path = require('path');
 var meow = require('meow');
+var lnfs = require('./');
 
 var cli = meow({
 	help: [
@@ -14,9 +15,16 @@ var cli = meow({
 	].join('\n')
 });
 
+if (!cli.input.length) {
+	console.error('Source file and target required');
+	process.exit(1);
+}
+
 lnfs(cli.input[0], cli.input[1], function (err) {
 	if (err) {
 		console.error(err.message);
-		return;
+		process.exit(1);
 	}
+
+	console.log(path.resolve(cli.input[1]) + ' -> ' + path.resolve(cli.input[0]));
 });
