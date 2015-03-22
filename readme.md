@@ -48,7 +48,7 @@ Path to destination.
 Type: `string`  
 Default: `file`
 
-Can be set to 'dir', 'file', or 'junction' and is only available on Windows (ignored on other platforms).
+Can be set to `dir`, `file`, or `junction` and is only available on Windows (ignored on other platforms).
 
 #### callback(err)
 
