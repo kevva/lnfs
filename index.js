@@ -25,7 +25,7 @@ function link(src, dest, type, cb) {
 
 module.exports = function (src, dest, type, cb) {
 	if (typeof src !== 'string' || typeof dest !== 'string') {
-		throw new Error('Source file and target is required');
+		throw new Error('Source file and target required');
 	}
 
 	if (typeof type === 'function' && !cb) {
@@ -68,7 +68,7 @@ module.exports = function (src, dest, type, cb) {
 
 module.exports.sync = function (src, dest, type) {
 	if (typeof src !== 'string' || typeof dest !== 'string') {
-		throw new Error('Source file and target is required');
+		throw new Error('Source file and target required');
 	}
 
 	src = path.resolve(src);
