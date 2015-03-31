@@ -5,7 +5,7 @@
 
 ## Install
 
-```sh
+```
 $ npm install --save lnfs
 ```
 
@@ -66,11 +66,11 @@ $ npm install --global lnfs
 ```
 $ lnfs --help
 
-Usage
-  $ lnfs <file> <target>
+  Usage
+    $ lnfs <file> <target>
 
-Example
-  $ lnfs foo.txt bar.txt
+  Example
+    $ lnfs foo.txt bar.txt
 ```
 
 

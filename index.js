@@ -1,8 +1,8 @@
 'use strict';
 
 var fs = require('fs');
-var mkdirp = require('mkdirp');
 var path = require('path');
+var mkdirp = require('mkdirp');
 var rm = require('rimraf');
 
 function link(src, dest, type, cb) {
