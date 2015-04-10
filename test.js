@@ -13,7 +13,7 @@ test('symlink a file', function (t) {
 
 		fs.realpath('tmp.js', function (err, file) {
 			t.assert(!err, err);
-			t.assert(file === __filename);
+			t.assert(file === __filename, file);
 
 			fs.unlink('tmp.js', function (err) {
 				t.assert(!err, err);
@@ -33,7 +33,7 @@ test('symlink a file two times', function (t) {
 
 			fs.realpath('tmp2.js', function (err, file) {
 				t.assert(!err, err);
-				t.assert(file === __filename);
+				t.assert(file === __filename, file);
 
 				fs.unlink('tmp2.js', function (err) {
 					t.assert(!err, err);
@@ -54,7 +54,7 @@ test('overwrite symlink with new source', function (t) {
 
 			fs.realpath('tmp3.js', function (err, file) {
 				t.assert(!err, err);
-				t.assert(file === path.resolve('index.js'));
+				t.assert(file === path.resolve('index.js'), file);
 
 				fs.unlink('tmp3.js', function (err) {
 					t.assert(!err, err);
@@ -66,7 +66,7 @@ test('overwrite symlink with new source', function (t) {
 
 test('symlink a file synchronously', function (t) {
 	lnfs.sync(__filename, 'tmp4.js');
-	t.assert(fs.realpathSync('tmp4.js') === __filename);
+	t.assert(fs.realpathSync('tmp4.js') === __filename, fs.realpathSync('tmp4.js'));
 	fs.unlinkSync('tmp4.js');
 	t.end();
 });
@@ -74,7 +74,7 @@ test('symlink a file synchronously', function (t) {
 test('symlink a file two times synchronously', function (t) {
 	lnfs.sync(__filename, 'tmp5.js');
 	lnfs.sync(__filename, 'tmp5.js');
-	t.assert(fs.realpathSync('tmp5.js') === __filename);
+	t.assert(fs.realpathSync('tmp5.js') === __filename, fs.realpathSync('tmp5.js'));
 	fs.unlinkSync('tmp5.js');
 	t.end();
 });
@@ -82,7 +82,7 @@ test('symlink a file two times synchronously', function (t) {
 test('overwrite symlink with new source synchronously', function (t) {
 	lnfs.sync(__filename, 'tmp6.js');
 	lnfs.sync('index.js', 'tmp6.js');
-	t.assert(fs.realpathSync('tmp6.js') === path.resolve('index.js'));
+	t.assert(fs.realpathSync('tmp6.js') === path.resolve('index.js'), fs.realpathSync('tmp6.js'));
 	fs.unlinkSync('tmp6.js');
 	t.end();
 });

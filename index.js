@@ -3,10 +3,10 @@
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
-var rm = require('rimraf');
+var rimraf = require('rimraf');
 
 function link(src, dest, type, cb) {
-	rm(dest, function (err) {
+	rimraf(dest, function (err) {
 		if (err) {
 			cb(err);
 			return;
@@ -79,7 +79,7 @@ module.exports.sync = function (src, dest, type) {
 		var realpath = fs.realpathSync(dest);
 
 		if (!stats.isSymbolicLink()) {
-			rm.sync(dest);
+			rimraf.sync(dest);
 			fs.symlinkSync(src, dest, type);
 			return;
 		}
@@ -88,7 +88,7 @@ module.exports.sync = function (src, dest, type) {
 			return;
 		}
 
-		rm.sync(dest);
+		rimraf.sync(dest);
 		fs.symlinkSync(src, dest, type);
 	} catch (err) {
 		if (err.code === 'ENOENT') {

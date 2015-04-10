@@ -16,10 +16,6 @@ $ npm install --save lnfs
 var symlink = require('lnfs');
 
 symlink('foo.txt', 'bar.txt', function (err) {
-	if (err) {
-		throw err;
-	}
-
 	console.log('Symlink successfully created!');
 });
 
@@ -33,12 +29,14 @@ symlink.sync('foo.txt', 'bar.txt');
 
 #### src
 
+*Required*  
 Type: `string`
 
 Path to source file.
 
 #### dest
 
+*Required*  
 Type: `string`
 
 Path to destination.
