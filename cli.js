@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-
 var path = require('path');
 var meow = require('meow');
 var lnfs = require('./');
@@ -15,7 +14,7 @@ var cli = meow({
 	].join('\n')
 });
 
-if (!cli.input.length) {
+if (cli.input.length < 2) {
 	console.error('Source file and target required');
 	process.exit(1);
 }

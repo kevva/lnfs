@@ -12,9 +12,7 @@
   "engines": {
     "node": ">=0.10.0"
   },
-  "bin": {
-    "lnfs": "cli.js"
-  },
+  "bin": "cli.js",
   "scripts": {
     "test": "node test.js"
   },
