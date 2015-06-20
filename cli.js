@@ -11,7 +11,7 @@ var cli = meow({
 		'',
 		'Example',
 		'  $ lnfs foo.txt bar.txt'
-	].join('\n')
+	]
 });
 
 if (cli.input.length < 2) {
