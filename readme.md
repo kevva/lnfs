@@ -2,6 +2,8 @@
 
 > Safely force create symlinks
 
+*See [lnfs-cli](https://github.com/kevva/lnfs-cli) for the command-line version.*
+
 
 ## Install
 
@@ -53,23 +55,6 @@ Can be set to `dir`, `file`, or `junction` and is only available on Windows (ign
 Type: `function`
 
 Returns nothing but a possible exception.
-
-
-## CLI
-
-```
-$ npm install --global lnfs
-```
-
-```
-$ lnfs --help
-
-  Usage
-    $ lnfs <file> <target>
-
-  Example
-    $ lnfs foo.txt bar.txt
-```
 
 
 ## License
