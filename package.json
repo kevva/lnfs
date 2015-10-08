@@ -27,9 +27,13 @@
   ],
   "dependencies": {
     "mkdirp": "^0.5.0",
+    "pify": "^2.2.0",
+    "pinkie-promise": "^1.0.0",
     "rimraf": "^2.2.8"
   },
   "devDependencies": {
-    "ava": "^0.0.4"
+    "ava": "^0.0.4",
+    "pify": "^2.2.0",
+    "pinkie-promise": "^1.0.0"
   }
 }

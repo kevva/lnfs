@@ -2,100 +2,42 @@
 var fs = require('fs');
 var path = require('path');
 var mkdirp = require('mkdirp');
+var pify = require('pify');
+var Promise = require('pinkie-promise');
 var rimraf = require('rimraf');
 
-function link(src, dest, type, cb) {
-	rimraf(dest, function (err) {
-		if (err) {
-			cb(err);
-			return;
-		}
-
-		mkdirp(path.dirname(dest), function (err) {
-			if (err) {
-				cb(err);
-				return;
-			}
-
-			fs.symlink(src, dest, type, cb);
-		});
+function link(src, dest, type) {
+	return Promise.all([
+		pify(rimraf, Promise)(dest),
+		pify(mkdirp, Promise)(path.dirname(dest))
+	]).then(function () {
+		return pify(fs.symlink, Promise)(src, dest, type);
 	});
 }
 
-module.exports = function (src, dest, type, cb) {
+module.exports = function (src, dest, type) {
 	if (typeof src !== 'string' || typeof dest !== 'string') {
-		throw new Error('Source file and target required');
-	}
-
-	if (typeof type === 'function' && !cb) {
-		cb = type;
-		type = null;
+		return Promise.reject(new TypeError('Expected a string'));
 	}
 
 	src = path.resolve(src);
 	dest = path.resolve(dest);
 
-	fs.lstat(dest, function (err, stats) {
-		if (err && err.code === 'ENOENT') {
-			return link(src, dest, type, cb);
-		}
-
-		if (err) {
-			cb(err);
-			return;
-		}
-
+	return pify(fs.lstat, Promise)(dest).then(function (stats) {
 		if (!stats.isSymbolicLink()) {
-			return link(src, dest, type, cb);
+			return link(src, dest, type);
 		}
 
-		fs.realpath(dest, function (err, res) {
-			if (err) {
-				cb(err);
-				return;
+		return pify(fs.realpath, Promise)(dest).then(function (res) {
+			if (res !== src) {
+				return link(src, dest, type);
 			}
-
-			if (res === src) {
-				cb();
-				return;
-			}
-
-			link(src, dest, type, cb);
 		});
-	});
-};
-
-module.exports.sync = function (src, dest, type) {
-	if (typeof src !== 'string' || typeof dest !== 'string') {
-		throw new Error('Source file and target required');
-	}
-
-	src = path.resolve(src);
-	dest = path.resolve(dest);
-
-	try {
-		var stats = fs.lstatSync(dest);
-		var realpath = fs.realpathSync(dest);
-
-		if (!stats.isSymbolicLink()) {
-			rimraf.sync(dest);
-			fs.symlinkSync(src, dest, type);
-			return;
-		}
-
-		if (realpath === src) {
-			return;
-		}
-
-		rimraf.sync(dest);
-		fs.symlinkSync(src, dest, type);
-	} catch (err) {
+	}).catch(function (err) {
 		if (err.code === 'ENOENT') {
-			mkdirp.sync(path.dirname(dest));
-			fs.symlinkSync(src, dest, type);
-			return;
+			return link(src, dest, type);
 		}
 
 		throw err;
-	}
+	});
 };

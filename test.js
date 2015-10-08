@@ -1,41 +1,37 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
+var pify = require('pify');
+var Promise = require('pinkie-promise');
 var test = require('ava');
 var lnfs = require('./');
+var realpath = pify(fs.realpath, Promise);
+var unlink = pify(fs.unlink, Promise);
 
 test('symlink a file', function (t) {
-	t.plan(4);
+	t.plan(2);
 
-	lnfs(__filename, 'tmp.js', function (err) {
-		t.assert(!err, err);
-
-		fs.realpath('tmp.js', function (err, file) {
-			t.assert(!err, err);
+	lnfs(__filename, 'tmp.js').then(function () {
+		realpath('tmp.js').then(function (file) {
 			t.assert(file === __filename, file);
 
-			fs.unlink('tmp.js', function (err) {
-				t.assert(!err, err);
+			unlink('tmp.js').then(function () {
+				t.assert(true);
 			});
 		});
 	});
 });
 
 test('symlink a file two times', function (t) {
-	t.plan(5);
+	t.plan(2);
 
-	lnfs(__filename, 'tmp2.js', function (err) {
-		t.assert(!err, err);
-
-		lnfs(__filename, 'tmp2.js', function (err) {
-			t.assert(!err, err);
-
-			fs.realpath('tmp2.js', function (err, file) {
-				t.assert(!err, err);
+	lnfs(__filename, 'tmp2.js').then(function () {
+		lnfs(__filename, 'tmp2.js').then(function () {
+			realpath('tmp2.js').then(function (file) {
 				t.assert(file === __filename, file);
 
-				fs.unlink('tmp2.js', function (err) {
-					t.assert(!err, err);
+				unlink('tmp2.js').then(function () {
+					t.assert(true);
 				});
 			});
 		});
@@ -43,45 +39,17 @@ test('symlink a file two times', function (t) {
 });
 
 test('overwrite symlink with new source', function (t) {
-	t.plan(5);
+	t.plan(2);
 
-	lnfs(__filename, 'tmp3.js', function (err) {
-		t.assert(!err, err);
-
-		lnfs('index.js', 'tmp3.js', function (err) {
-			t.assert(!err, err);
-
-			fs.realpath('tmp3.js', function (err, file) {
-				t.assert(!err, err);
+	lnfs(__filename, 'tmp3.js').then(function () {
+		lnfs('index.js', 'tmp3.js').then(function () {
+			realpath('tmp3.js').then(function (file) {
 				t.assert(file === path.resolve('index.js'), file);
 
-				fs.unlink('tmp3.js', function (err) {
-					t.assert(!err, err);
+				unlink('tmp3.js').then(function () {
+					t.assert(true);
 				});
 			});
 		});
 	});
-});
-
-test('symlink a file synchronously', function (t) {
-	lnfs.sync(__filename, 'tmp4.js');
-	t.assert(fs.realpathSync('tmp4.js') === __filename, fs.realpathSync('tmp4.js'));
-	fs.unlinkSync('tmp4.js');
-	t.end();
-});
-
-test('symlink a file two times synchronously', function (t) {
-	lnfs.sync(__filename, 'tmp5.js');
-	lnfs.sync(__filename, 'tmp5.js');
-	t.assert(fs.realpathSync('tmp5.js') === __filename, fs.realpathSync('tmp5.js'));
-	fs.unlinkSync('tmp5.js');
-	t.end();
-});
-
-test('overwrite symlink with new source synchronously', function (t) {
-	lnfs.sync(__filename, 'tmp6.js');
-	lnfs.sync('index.js', 'tmp6.js');
-	t.assert(fs.realpathSync('tmp6.js') === path.resolve('index.js'), fs.realpathSync('tmp6.js'));
-	fs.unlinkSync('tmp6.js');
-	t.end();
 });

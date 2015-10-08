@@ -15,19 +15,19 @@ $ npm install --save lnfs
 ## Usage
 
 ```js
-var symlink = require('lnfs');
+const symlink = require('lnfs');
 
-symlink('foo.txt', 'bar.txt', function (err) {
+symlink('foo.txt', 'bar.txt').then(() => {
 	console.log('Symlink successfully created!');
 });
-
-symlink.sync('foo.txt', 'bar.txt');
 ```
 
 
 ## API
 
-### lnfs(src, dest, type, callback)
+### lnfs(src, dest, type)
+
+Returns a promise that resolves nothing.
 
 #### src
 
@@ -49,12 +49,6 @@ Type: `string`
 Default: `file`
 
 Can be set to `dir`, `file`, or `junction` and is only available on Windows (ignored on other platforms).
-
-#### callback(err)
-
-Type: `function`
-
-Returns nothing but a possible exception.
 
 
 ## License
