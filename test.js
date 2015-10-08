@@ -1,55 +1,38 @@
-'use strict';
-var fs = require('fs');
-var path = require('path');
-var pify = require('pify');
-var Promise = require('pinkie-promise');
-var test = require('ava');
-var lnfs = require('./');
-var realpath = pify(fs.realpath, Promise);
-var unlink = pify(fs.unlink, Promise);
+import fs from 'fs';
+import path from 'path';
+import pify from 'pify';
+import Promise from 'pinkie-promise';
+import test from 'ava';
+import fn from './';
 
-test('symlink a file', function (t) {
-	t.plan(2);
+const realpath = pify(fs.realpath, Promise);
+const unlink = pify(fs.unlink, Promise);
 
-	lnfs(__filename, 'tmp.js').then(function () {
-		realpath('tmp.js').then(function (file) {
-			t.assert(file === __filename, file);
+test('symlink a file', async t => {
+	await fn(__filename, 'tmp.js');
 
-			unlink('tmp.js').then(function () {
-				t.assert(true);
-			});
-		});
-	});
+	const file = await realpath('tmp.js');
+	t.is(file, __filename);
+
+	await unlink('tmp.js');
 });
 
-test('symlink a file two times', function (t) {
-	t.plan(2);
+test('symlink a file two times', async t => {
+	await fn(__filename, 'tmp2.js');
+	await fn(__filename, 'tmp2.js');
 
-	lnfs(__filename, 'tmp2.js').then(function () {
-		lnfs(__filename, 'tmp2.js').then(function () {
-			realpath('tmp2.js').then(function (file) {
-				t.assert(file === __filename, file);
+	const file = await realpath('tmp2.js');
+	t.is(file, __filename);
 
-				unlink('tmp2.js').then(function () {
-					t.assert(true);
-				});
-			});
-		});
-	});
+	await unlink('tmp2.js');
 });
 
-test('overwrite symlink with new source', function (t) {
-	t.plan(2);
+test('overwrite symlink with new source', async t => {
+	await fn(__filename, 'tmp3.js');
+	await fn('index.js', 'tmp3.js');
 
-	lnfs(__filename, 'tmp3.js').then(function () {
-		lnfs('index.js', 'tmp3.js').then(function () {
-			realpath('tmp3.js').then(function (file) {
-				t.assert(file === path.resolve('index.js'), file);
+	const file = await realpath('tmp3.js');
+	t.is(file, path.resolve('index.js'));
 
-				unlink('tmp3.js').then(function () {
-					t.assert(true);
-				});
-			});
-		});
-	});
+	await unlink('tmp3.js');
 });
