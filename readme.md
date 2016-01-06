@@ -2,8 +2,6 @@
 
 > Safely force create symlinks
 
-*See [lnfs-cli](https://github.com/kevva/lnfs-cli) for the command-line version.*
-
 
 ## Install
 
@@ -27,8 +25,6 @@ symlink('foo.txt', 'bar.txt').then(() => {
 
 ### lnfs(src, dest, type)
 
-Returns a promise that resolves nothing.
-
 #### src
 
 *Required*  
@@ -49,6 +45,11 @@ Type: `string`
 Default: `file`
 
 Can be set to `dir`, `file`, or `junction` and is only available on Windows (ignored on other platforms).
+
+
+## Related
+
+* [lnfs-cli](https://github.com/kevva/lnfs-cli) - CLI for this module
 
 
 ## License

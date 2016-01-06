@@ -36,10 +36,5 @@
     "pify": "^2.2.0",
     "pinkie-promise": "^1.0.0",
     "xo": "*"
-  },
-  "xo": {
-    "ignore": [
-      "test.js"
-    ]
   }
 }
