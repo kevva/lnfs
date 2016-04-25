@@ -1,12 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import pify from 'pify';
-import Promise from 'pinkie-promise';
 import test from 'ava';
 import fn from './';
 
-const realpath = pify(fs.realpath, Promise);
-const unlink = pify(fs.unlink, Promise);
+const realpath = pify(fs.realpath);
+const unlink = pify(fs.unlink);
 
 test('symlink a file', async t => {
 	await fn(__filename, 'tmp.js');

@@ -1,21 +1,17 @@
 'use strict';
-var fs = require('fs');
-var path = require('path');
-var mkdirp = require('mkdirp');
-var pify = require('pify');
-var Promise = require('pinkie-promise');
-var rimraf = require('rimraf');
+const fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const pify = require('pify');
+const rimraf = require('rimraf');
+const fsP = pify(fs);
 
-function link(src, dest, type) {
-	return Promise.all([
-		pify(rimraf, Promise)(dest),
-		pify(mkdirp, Promise)(path.dirname(dest))
-	]).then(function () {
-		return pify(fs.symlink, Promise)(src, dest, type);
-	});
-}
+const link = (src, dest, type) => Promise.all([
+	pify(rimraf)(dest),
+	pify(mkdirp)(path.dirname(dest))
+]).then(() => fsP.symlink(src, dest, type));
 
-module.exports = function (src, dest, type) {
+module.exports = (src, dest, type) => {
 	if (typeof src !== 'string' || typeof dest !== 'string') {
 		return Promise.reject(new TypeError('Expected a string'));
 	}
@@ -23,21 +19,19 @@ module.exports = function (src, dest, type) {
 	src = path.resolve(src);
 	dest = path.resolve(dest);
 
-	return pify(fs.lstat, Promise)(dest).then(function (stats) {
-		if (!stats.isSymbolicLink()) {
-			return link(src, dest, type);
-		}
-
-		return pify(fs.realpath, Promise)(dest).then(function (res) {
-			if (res !== src) {
+	return fsP.lstat(dest)
+		.then(stats => {
+			if (!stats.isSymbolicLink()) {
 				return link(src, dest, type);
 			}
-		});
-	}).catch(function (err) {
-		if (err.code === 'ENOENT') {
-			return link(src, dest, type);
-		}
 
-		throw err;
-	});
+			return fsP.realpath(dest).then(res => res !== src && link(src, dest, type));
+		})
+		.catch(err => {
+			if (err.code === 'ENOENT') {
+				return link(src, dest, type);
+			}
+
+			throw err;
+		});
 };
