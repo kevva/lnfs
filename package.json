@@ -1,6 +1,6 @@
 {
 	"name": "lnfs",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Safely force create symlinks",
 	"license": "MIT",
 	"repository": "kevva/lnfs",
