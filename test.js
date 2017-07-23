@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import pify from 'pify';
 import test from 'ava';
-import m from './';
+import m from '.';
 
 const fsP = pify(fs);
 

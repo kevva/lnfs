@@ -1,35 +1,42 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const mkdirp = require('mkdirp');
+const del = require('del');
+const makeDir = require('make-dir');
 const pify = require('pify');
-const rimraf = require('rimraf');
+const pSeries = require('p-series');
+
 const fsP = pify(fs);
 
-const link = (src, dest, type) => Promise.all([
-	pify(rimraf)(dest),
-	pify(mkdirp)(path.dirname(dest))
-]).then(() => fsP.symlink(src, dest, type));
+const link = (src, dest, type) => pSeries([
+	() => del(dest, {force: true}),
+	() => makeDir(path.dirname(dest)),
+	() => fsP.symlink(src, dest, type)
+]);
 
 module.exports = (src, dest, type) => {
-	if (typeof src !== 'string' || typeof dest !== 'string') {
-		return Promise.reject(new TypeError('Expected a string'));
+	if (typeof src !== 'string') {
+		return Promise.reject(new TypeError(`Expected a \`string\`, got \`${typeof src}\``));
 	}
 
-	src = path.resolve(src);
-	dest = path.resolve(dest);
+	if (typeof dest !== 'string') {
+		return Promise.reject(new TypeError(`Expected a \`string\`, got \`${typeof dest}\``));
+	}
 
-	return fsP.lstat(dest)
+	const resolvedSrc = path.resolve(src);
+	const resolvedDest = path.resolve(dest);
+
+	return fsP.lstat(resolvedDest)
 		.then(stats => {
 			if (!stats.isSymbolicLink()) {
-				return link(src, dest, type);
+				return link(resolvedSrc, resolvedDest, type);
 			}
 
-			return fsP.realpath(dest).then(res => res !== src && link(src, dest, type));
+			return fsP.realpath(resolvedDest).then(res => res !== resolvedSrc && link(resolvedSrc, resolvedDest, type));
 		})
 		.catch(err => {
 			if (err.code === 'ENOENT') {
-				return link(src, dest, type);
+				return link(resolvedSrc, dest, type);
 			}
 
 			throw err;

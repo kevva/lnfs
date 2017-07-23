@@ -1,41 +1,38 @@
 {
-  "name": "lnfs",
-  "version": "3.0.0",
-  "description": "Safely force create symlinks",
-  "license": "MIT",
-  "repository": "kevva/lnfs",
-  "author": {
-    "name": "Kevin Mårtensson",
-    "email": "kevinmartensson@gmail.com",
-    "url": "https://github.com/kevva"
-  },
-  "engines": {
-    "node": ">=4"
-  },
-  "scripts": {
-    "test": "xo && ava"
-  },
-  "files": [
-    "index.js"
-  ],
-  "keywords": [
-    "linux",
-    "lnfs",
-    "osx",
-    "symlink",
-    "windows"
-  ],
-  "dependencies": {
-    "mkdirp": "^0.5.0",
-    "pify": "^2.2.0",
-    "rimraf": "^2.2.8"
-  },
-  "devDependencies": {
-    "ava": "*",
-    "pify": "^2.2.0",
-    "xo": "*"
-  },
-  "xo": {
-    "esnext": true
-  }
+	"name": "lnfs",
+	"version": "3.0.0",
+	"description": "Safely force create symlinks",
+	"license": "MIT",
+	"repository": "kevva/lnfs",
+	"author": {
+		"name": "Kevin Mårtensson",
+		"email": "kevinmartensson@gmail.com",
+		"url": "https://github.com/kevva"
+	},
+	"engines": {
+		"node": ">=4"
+	},
+	"scripts": {
+		"test": "xo && ava"
+	},
+	"files": [
+		"index.js"
+	],
+	"keywords": [
+		"linux",
+		"lnfs",
+		"osx",
+		"symlink",
+		"windows"
+	],
+	"dependencies": {
+		"del": "^3.0.0",
+		"make-dir": "^1.0.0",
+		"p-series": "^1.0.0",
+		"pify": "^3.0.0"
+	},
+	"devDependencies": {
+		"ava": "*",
+		"xo": "*"
+	}
 }

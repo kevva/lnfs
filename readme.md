@@ -6,7 +6,7 @@
 ## Install
 
 ```
-$ npm install --save lnfs
+$ npm install lnfs
 ```
 
 
@@ -24,6 +24,8 @@ lnfs('foo.txt', 'bar.txt').then(() => {
 ## API
 
 ### lnfs(src, dest, [type])
+
+Returns a `Promise` with the path to the symlink.
 
 #### src
 
